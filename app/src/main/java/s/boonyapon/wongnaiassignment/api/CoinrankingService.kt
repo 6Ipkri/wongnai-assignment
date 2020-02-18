@@ -9,6 +9,6 @@ import s.boonyapon.wongnaiassignment.model.PublicCrypto
 
 interface CoinrankingService {
     @GET("coins")
-    fun getCoins() : Observable<PublicCrypto>
+    fun getCoins(@Query("offset") offset: Int , @Query("limit") limit: Int) : Observable<PublicCrypto>
 
 }

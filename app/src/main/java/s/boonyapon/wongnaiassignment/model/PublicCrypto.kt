@@ -10,7 +10,7 @@ data class PublicCrypto(
 data class Data(
     @SerializedName("stats") val stats: Stats,
     @SerializedName("base") val base: Base,
-    @SerializedName("coins") val coins: Array<Coins>
+    @SerializedName("coins") val coins: ArrayList<Coins>
     )
 
 data class Stats(

@@ -1,95 +1,94 @@
 package s.boonyapon.wongnaiassignment.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.net.Uri
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
-import com.squareup.picasso.Picasso
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.sum_long_card.view.*
 import s.boonyapon.wongnaiassignment.R
 import s.boonyapon.wongnaiassignment.api.ApiService
-import s.boonyapon.wongnaiassignment.custom.Constant
+import s.boonyapon.wongnaiassignment.custom.CoinsAdapter
 import s.boonyapon.wongnaiassignment.model.*
-import java.lang.Integer.parseInt
 
 class MainActivity : AppCompatActivity() {
-
-
+    var visibleItemCount = 0
+    var pastVisibleItemCount = 0
+    var totalItemCount = 0
+    var loaded = false
+    var offset = 0
+    var list:ArrayList<Coins> = ArrayList()
+    lateinit var adapter:CoinsAdapter
+    lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getPublicCoinsData()
+        layoutManager = LinearLayoutManager(this)
+        btcList.layoutManager = layoutManager
+        btcList.setHasFixedSize(true)
+        pullRefresh()
+        getPublicCoinsData(offset)
+
 
     }
     @SuppressLint("CheckResult")
-    private fun getPublicCoinsData() {
-        val observable =  ApiService.service().getCoins()
+    private fun getPublicCoinsData(offset : Int) {
+        val observable =  ApiService.service().getCoins(offset,10)
         observable
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { pbCoins ->
-                createCoinsList(pbCoins.data)
+                loaded = true
+                setCoinsAdapter(pbCoins.data.coins)
             }
     }
 
-    private fun createCoinsList(data: Data){
-        val coins = data.coins
-        coins.forEachIndexed { index,coin ->
-            val position = index + 1
-            var card:View = if (index != 0 && position % 5 == 0) {
-                shortCardUI(coin)
-            }else{
-                longCardUI(coin)
-            }
-            btcList.addView(card)
+    private fun pullRefresh(){
 
+        swipe_refresh_layout.setOnRefreshListener {
+                list.clear()
+                offset = 0
+                getPublicCoinsData(offset)
+                adapter.notifyDataSetChanged()
+                swipe_refresh_layout.isRefreshing = false
         }
+        swipe_refresh_layout.setColorSchemeColors(Color.parseColor("#008744"),Color.parseColor("#0057e7"),Color.parseColor("#d62d20"))
 
     }
 
-    private fun longCardUI(coin : Coins) : View {
-        val card = LayoutInflater.from(this).inflate(R.layout.sum_long_card, null)
-        val iconUrl = coin.iconUrl
-        val btcName = coin.name
-        val btcDescription = coin.description
+    private fun setCoinsAdapter(coins:ArrayList<Coins>?){
+        if(list.size == 0){
+            list = coins!!
+            adapter = CoinsAdapter(list)
+            btcList.adapter = adapter
+        }else{
+            val currentPosition = (btcList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+            list.addAll(coins!!)
+            adapter.notifyDataSetChanged()
+            btcList.scrollToPosition(currentPosition)
+        }
+        btcList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if(dy > 0){
+                        visibleItemCount = layoutManager.childCount
+                        totalItemCount = layoutManager.itemCount
+                        pastVisibleItemCount = (btcList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        if(loaded){
+                            if((visibleItemCount + pastVisibleItemCount) >= totalItemCount){
+                                loaded = false
+                                offset++
+                                getPublicCoinsData(offset)
+                            }
+                        }
+                    }
+            }
+        })
 
-        card.nameView.text = btcName
-        card.describeView.text = btcDescription
-        card.iconView.loadSvg(iconUrl)
-
-        return card
     }
-
-    private fun shortCardUI(coin : Coins) : View {
-        val card = LayoutInflater.from(this).inflate(R.layout.sum_short_card, null)
-        val iconUrl = coin.iconUrl
-        val btcName = coin.name
-        val btcId = coin.id
-        card.nameView.text = btcName
-        card.iconView.loadSvg(iconUrl)
-
-        return card
-    }
-
-    private fun ImageView.loadSvg(url: String?) {
-        GlideToVectorYou
-            .init()
-            .with(this.context)
-            .load(Uri.parse(url), this)
-    }
-
 
 }
