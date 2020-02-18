@@ -3,7 +3,45 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-   >
+    >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/overall_margin">
+        <ImageView
+            android:id="@+id/iconView"
+            android:layout_width="@dimen/coin_icon"
+            android:layout_height="@dimen/coin_icon"
+            android:layout_marginEnd="@dimen/overall_margin"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/nameView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:textSize="@dimen/coinname_font"
+                android:textColor="@color/coin_name_dark"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/describeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/describe_dark"
+                android:textSize="@dimen/describe_font"
+                android:maxLines="3"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/underline"
+        />
 
 </LinearLayout>
