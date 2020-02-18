@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="coin_name_dark">#000000</color>
+    <color name="describe_dark">#9E9E9E</color>
+    <color name="underline">#EEEEEE</color>
 </resources>
