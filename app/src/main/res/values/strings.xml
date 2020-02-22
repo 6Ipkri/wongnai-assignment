@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Wongnai Assignment</string>
+    <string name="app_name">Coin Ranking</string>
+    <string name="search">ค้นหา</string>
 </resources>

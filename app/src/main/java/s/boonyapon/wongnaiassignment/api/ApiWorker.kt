@@ -12,11 +12,6 @@ import java.util.concurrent.TimeUnit
 object ApiWorker {
     private var mClient: OkHttpClient? = null
     private var mGsonConverter: GsonConverterFactory? = null
-
-    /**
-     * Don't forget to remove Interceptors (or change Logging Level to NONE)
-     * in production! Otherwise people will be able to see your request and response on Log Cat.
-     */
     val client: OkHttpClient
     @Throws(NoSuchAlgorithmException::class, KeyManagementException::class)
     get() {

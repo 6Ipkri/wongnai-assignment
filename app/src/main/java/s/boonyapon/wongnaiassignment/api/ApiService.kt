@@ -6,8 +6,6 @@ import s.boonyapon.wongnaiassignment.custom.Constant
 
 
 object ApiService {
-    private val TAG = "--ApiService"
-
     fun service() = Retrofit.Builder()
         .baseUrl(Constant.API_BASE_PATH)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

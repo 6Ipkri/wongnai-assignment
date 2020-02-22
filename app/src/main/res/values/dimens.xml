@@ -4,7 +4,7 @@
     <dimen name="padding_search">14dp</dimen>
     <dimen name="search_margin_tb">20dp</dimen>
     <dimen name="text_margin">8dp</dimen>
-    <dimen name="coinname_font">16sp</dimen>
-    <dimen name="describe_font">14sp</dimen>
+    <dimen name="body1_font">16sp</dimen>
+    <dimen name="body2_font">14sp</dimen>
     <dimen name="coin_icon">50dp</dimen>
 </resources>
