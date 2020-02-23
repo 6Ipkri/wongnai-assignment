@@ -25,6 +25,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 
+
 class MainActivity : AppCompatActivity() {
     var visibleItemCount = 0
     var pastVisibleItemCount = 0
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     var loaded = false
     var offset = 0
     var list: ArrayList<Coins> = ArrayList()
-    var delayTime = System.currentTimeMillis() + 1000
+    var delayTime = System.currentTimeMillis() + 500
     lateinit var adapter: CoinsAdapter
     lateinit var layoutManager: RecyclerView.LayoutManager
 
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * set pull refresh function
+     * clear layout and request new data from api
+     */
     private fun pullRefresh() {
         swipe_refresh_layout.setOnRefreshListener {
             list.clear()
@@ -59,6 +64,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * set recycle view adapter and add scroll listener
+     * when user scroll to last item it will call new data from api by offset
+     * @param coins
+     */
     private fun setCoinsAdapter(coins: ArrayList<Coins>?) {
         if (list.size == 0) {
             list = coins!!
@@ -71,6 +81,7 @@ class MainActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             btcList.scrollToPosition(currentPosition)
         }
+
         btcList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
@@ -91,6 +102,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * set event listener when user press search button on keyboard
+     * it will call api by search
+     */
     private val editorListener = TextView.OnEditorActionListener { v, actionId, event ->
         when (actionId) {
             EditorInfo.IME_ACTION_SEARCH -> {
@@ -102,6 +117,10 @@ class MainActivity : AppCompatActivity() {
         return@OnEditorActionListener false
     }
 
+    /**
+     * search from keyword
+     * @param searchText get value from editText
+     */
     private fun getData(searchText : String){
         list.clear()
         getSearchData(searchText, null, null, null)
@@ -110,8 +129,11 @@ class MainActivity : AppCompatActivity() {
         getSearchData(null, null, null, searchText)
     }
 
+    /**
+     * set edit text chang listener
+     * set delay before send http request
+     */
     private fun setEditTextKeyUp() {
-
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -120,8 +142,8 @@ class MainActivity : AppCompatActivity() {
                 before: Int, count: Int
             ) {
                 notFound.text = "$s not found"
-                delayTime = System.currentTimeMillis() + 1000
-                Timer().schedule(1000) {
+                delayTime = System.currentTimeMillis() + 500
+                Timer().schedule(500) {
                     if(System.currentTimeMillis() >= delayTime && s.isNotEmpty()){
                         getData(s.toString())
                     }
@@ -137,6 +159,11 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * request public coin data from api
+     * @param offset increase by scroll to last recycle view item
+     */
+
     @SuppressLint("CheckResult")
     private fun getPublicCoinsData(offset: Int) {
         val observable = ApiService.service().getCoins(offset, 10)
@@ -151,6 +178,13 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    /**
+     * request search data from api
+     * @param ids search by coin id
+     * @param slugs search by slug
+     * @param symbols search by symbol
+     * @param prefix
+     */
     @SuppressLint("CheckResult")
     private fun getSearchData(ids: String?, slugs: String?, symbols: String?, prefix: String?) {
         val observable = ApiService.service().coinsSearch(ids, slugs, symbols, prefix)

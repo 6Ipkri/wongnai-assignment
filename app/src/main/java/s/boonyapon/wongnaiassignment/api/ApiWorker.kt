@@ -1,7 +1,6 @@
 package s.boonyapon.wongnaiassignment.api
 
 import com.google.gson.GsonBuilder
-import okhttp3.Handshake.get
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,14 +22,11 @@ object ApiWorker {
             httpBuilder
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)  /// show all JSON in logCat
             mClient = httpBuilder.build()
 
         }
         return mClient!!
     }
-
-
     val gsonConverter: GsonConverterFactory
     get() {
         if(mGsonConverter == null){

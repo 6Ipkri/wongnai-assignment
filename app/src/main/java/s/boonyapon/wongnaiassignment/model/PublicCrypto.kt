@@ -2,6 +2,9 @@ package s.boonyapon.wongnaiassignment.model
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Data schema of Coinranking api
+ */
 data class PublicCrypto(
     @SerializedName("status") val status: String,
     @SerializedName("data") val data: Data

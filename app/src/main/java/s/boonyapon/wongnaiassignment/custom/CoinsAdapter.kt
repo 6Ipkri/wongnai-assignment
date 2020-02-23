@@ -12,10 +12,13 @@ import s.boonyapon.wongnaiassignment.R
 import s.boonyapon.wongnaiassignment.model.Coins
 import java.lang.Exception
 
-
-
+/**
+ * Custom recycle view adapter
+ *
+ */
 class CoinsAdapter(private val items: ArrayList<Coins>): RecyclerView.Adapter<CoinsAdapter.ViewHolder>() {
 
+    // select layout
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when((viewType + 1) % 5 == 0){
             true -> ViewHolder(
@@ -39,8 +42,9 @@ class CoinsAdapter(private val items: ArrayList<Coins>): RecyclerView.Adapter<Co
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
-        holder.itemView.setOnClickListener {}
     }
+
+    // set data in layout
     class ViewHolder(itemsView: View): RecyclerView.ViewHolder(itemsView) {
         fun bind(coin: Coins) {
             itemView.apply {
@@ -52,7 +56,7 @@ class CoinsAdapter(private val items: ArrayList<Coins>): RecyclerView.Adapter<Co
                }catch (e:Exception){}
             }
         }
-
+        // load image url
         private fun ImageView.loadSvg(url: String?) {
             GlideToVectorYou
                 .init()

@@ -4,6 +4,11 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import s.boonyapon.wongnaiassignment.custom.Constant
 
+/**
+ * Create service for call Coinranking API by retrofit2
+ * and create custom service
+ */
+
 
 object ApiService {
     fun service() = Retrofit.Builder()
