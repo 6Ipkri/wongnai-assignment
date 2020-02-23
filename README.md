@@ -5,7 +5,6 @@ Created By: Boonyapon S
 Last Edited: Feb 23, 2020 1:57 PM
 
 ## Overview
----
 - works on Android 6.0+ (API level 23+)
 - show real time cryptocurrency ranking
 - search by key word
@@ -13,13 +12,11 @@ Last Edited: Feb 23, 2020 1:57 PM
 ![Wongnai%20Assignment/coin_ranking_-_ui.png](doc/coin_ranking_-_ui.png)
 
 ## API
----
 ![Wongnai%20Assignment/Screen_Shot_2563-02-23_at_10.42.05.png](doc/Screen_Shot_2563-02-23_at_10.42.05.png)
 
 read more : [https://docs.coinranking.com/](https://docs.coinranking.com/)
 
 ### License
----
     Copyright 2019 Square, Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
